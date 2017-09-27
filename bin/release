@@ -44,15 +44,16 @@ output = JavaBuildpack::Buildpack.with_buildpack(app_dir, 'Release failed with e
     output.gsub! "http.port=$PORT", "http.port=3000"
 
 
-    inx = output.index('web:')
-    webStr = output[inx+6..output.length-3]
+    webInx = output.index('web:')
+    webInxEnd = output.index("'", webInx + 7)
+    webStr = output[webInx+6..webInxEnd-1]
     webStr = webStr.delete("\r\n")
     webStr = webStr.delete("\n")
     webStr = webStr.delete("\r")
     runCmd = Base64.encode64("PORT=3000 && " + webStr).delete("\n")
 
-    output =  output[0..inx-1] + "web: 'DEV_UTILS=\"#{strDevUtils}\" #{app_controller_exe} -startCmd #{runCmd} '"
-    #output.sub! "web: '", "web: 'CFPORT=$PORT PORT=3000 #{app_controller_exe} -jdbPath #{jdb_exe} & CFPORT=$PORT PORT=3000 "
+    output =  output[0..webInx-1] + "web: 'DEV_UTILS=\"#{strDevUtils}\" #{app_controller_exe} -startCmd #{runCmd} '"
+     #output.sub! "web: '", "web: 'CFPORT=$PORT PORT=3000 #{app_controller_exe} -jdbPath #{jdb_exe} & CFPORT=$PORT PORT=3000 "
     #output.sub! "web: '", "web: 'export CFPORT=$PORT && export PORT=3000 && curl -s https://github.com/ariel-bentu/java-buildpack/raw/master/appcontroller.tar.gz | tar xfpz - && ./appcontroller & "
     #end 
 
