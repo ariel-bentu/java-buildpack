@@ -99,6 +99,47 @@ module JavaBuildpack
 
       payload
     end
+    
+     def dev_release
+      container = component_detection('container', @containers, true).first
+      no_container unless container
+
+      commands = []
+      commands << component_detection('JRE', @jres, true).first.release
+
+      component_detection('framework', @frameworks, false).map(&:release)
+
+      commands << container.release
+
+      commands.insert 0, @java_opts.as_env_var
+      command = commands.flatten.compact.join(' && ')
+
+      app_controller_exe = "/home/vcap/app/.java-buildpack/hotswap_agent/lib/appcontroller"
+      jdb_exe            = "/home/vcap/app/.java-buildpack/hotswap_agent/lib/sc_jdb"
+
+      port = "8080"
+
+      devUtils = 
+      {
+        :server_port => ":8080",  :jdb_path => "#{jdb_exe}", :jdb_debug_path => "jdb", 
+        :start => "sleep 5000", :app_url => "http://localhost:3000" 
+      }
+       
+      strDevUtils = devUtils.to_json.gsub! "\"",  "\\\"" 
+      output.sub! "http.port=$PORT", "http.port=3000"
+      runCmd = (Base64.encode64("PORT=3000 " + command).delete("\n")).delete("\n")
+       
+      devStart = "web: 'DEV_UTILS=\"#{strDevUtils}\" #{app_controller_exe} -startCmd #{runCmd} '" 
+      payload = {
+        'addons'                => [],
+        'config_vars'           => {},
+        'default_process_types' => { 'web' => devStart, 'task' => command }
+      }.to_yaml
+
+      @logger.debug { "Release Payload:\n#{payload}" }
+
+      payload
+    end
 
     private_class_method :new
 
