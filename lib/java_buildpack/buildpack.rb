@@ -129,7 +129,7 @@ module JavaBuildpack
       command.sub! "http.port=$PORT", "http.port=3000"
       runCmd = (Base64.encode64("PORT=3000 " + command).delete("\n")).delete("\n")
        
-      devStart = "'DEV_UTILS=\"#{strDevUtils}\" #{app_controller_exe} -startCmd #{runCmd}'" 
+      devStart = "DEV_UTILS=\"#{strDevUtils}\" #{app_controller_exe} -startCmd #{runCmd}" 
       payload = {
         'addons'                => [],
         'config_vars'           => {},
