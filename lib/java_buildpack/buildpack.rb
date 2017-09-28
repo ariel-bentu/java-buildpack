@@ -100,7 +100,7 @@ module JavaBuildpack
       payload
     end
     
-     def dev_release
+    def dev_release
       container = component_detection('container', @containers, true).first
       no_container unless container
 
