@@ -121,6 +121,7 @@ module JavaBuildpack
       
       devUtils = 
       {
+        :start => "default",
         :server_port => "$PORT",  
         :jdb_path => "#{jdb_exe}", 
         :jdb_debug_path => "jdb", 
