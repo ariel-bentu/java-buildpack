@@ -118,7 +118,9 @@ module JavaBuildpack
       jdb_exe            = "/home/vcap/app/.java-buildpack/hotswap_agent/lib/sc_jdb"
 
       port = ENV['PORT']
-
+     
+      @logger.debug { "App ENV Vars:\n#{ENV.to_h.to_yaml}" }
+      
       devUtils = 
       {
         :server_port => ":#{port}",  
