@@ -116,14 +116,12 @@ module JavaBuildpack
 
       app_controller_exe = "/home/vcap/app/.java-buildpack/hotswap_agent/lib/appcontroller"
       jdb_exe            = "/home/vcap/app/.java-buildpack/hotswap_agent/lib/sc_jdb"
-
-      port = ENV['PORT']
      
       @logger.debug { "App ENV Vars:\n#{ENV.to_h.to_yaml}" }
       
       devUtils = 
       {
-        :server_port => ":#{port}",  
+        :server_port => "$PORT",  
         :jdb_path => "#{jdb_exe}", 
         :jdb_debug_path => "jdb", 
         :app_url => "http://localhost:3000" 
