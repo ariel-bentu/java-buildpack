@@ -117,23 +117,25 @@ module JavaBuildpack
       app_controller_exe = "/home/vcap/app/.java-buildpack/hotswap_agent/lib/appcontroller"
       jdb_exe            = "/home/vcap/app/.java-buildpack/hotswap_agent/lib/sc_jdb"
 
-      port = "8080"
+      port = ENV['PORT']
 
       devUtils = 
       {
-        :server_port => ":8080",  :jdb_path => "#{jdb_exe}", :jdb_debug_path => "jdb", 
-        :start => "sleep 5000", :app_url => "http://localhost:3000" 
+        :server_port => ":#{port}",  
+        :jdb_path => "#{jdb_exe}", 
+        :jdb_debug_path => "jdb", 
+        :app_url => "http://localhost:3000" 
       }
        
       strDevUtils = devUtils.to_json.gsub! "\"",  "\\\"" 
       command.sub! "http.port=$PORT", "http.port=3000"
       runCmd = (Base64.encode64("PORT=3000 " + command).delete("\n")).delete("\n")
        
-      devStart = "DEV_UTILS=\"#{strDevUtils}\" #{app_controller_exe} -startCmd #{runCmd}" 
+      startDev = "DEV_UTILS=\"#{strDevUtils}\" #{app_controller_exe} -startCmd #{runCmd}" 
       payload = {
         'addons'                => [],
         'config_vars'           => {},
-        'default_process_types' => { 'web' => devStart, 'task' => command }
+        'default_process_types' => { 'web' => startDev, 'task' => command }
       }.to_yaml
 
       @logger.debug { "Release Payload:\n#{payload}" }
