@@ -122,7 +122,7 @@ module JavaBuildpack
       devUtils = 
       {
         :start => "default",
-        :server_port => "$PORT",  
+        :server_port => ":$PORT",  
         :jdb_path => "#{jdb_exe}", 
         :jdb_debug_path => "jdb", 
         :app_url => "http://localhost:3000" 
@@ -140,7 +140,6 @@ module JavaBuildpack
       }.to_yaml
 
       @logger.debug { "Release Payload:\n#{payload}" }
-
       payload
     end
 
