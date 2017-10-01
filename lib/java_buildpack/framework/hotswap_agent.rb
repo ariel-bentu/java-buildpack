@@ -53,7 +53,7 @@ module JavaBuildpack
           .add_javaagent(libpath +  jar_name)
 
         
-        jdb_cmd = ".java-buildpack/open_jdk_jre/bin/java -cp .java-buildpack/open_jdk_jre/lib/tools.jar com.sun.tools.example.debug.tty.TTY"
+        jdb_cmd = "/home/vcap/app/.java-buildpack/open_jdk_jre/bin/java -cp /home/vcap/app/.java-buildpack/open_jdk_jre/lib/tools.jar com.sun.tools.example.debug.tty.TTY"
         
         devUtils = 
               {
