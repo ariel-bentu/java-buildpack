@@ -37,7 +37,7 @@ module JavaBuildpack
       def compile
         download_jar('1.0', @uri, jar_name, libpath)
         download_tar('1.0', @appcontroller_uri, true, libpath, 'App Controller')
-        download_tar('1.0', @jdblibs_uri, false, libpath, 'JDB')
+        #download_tar('1.0', @jdblibs_uri, false, libpath, 'JDB')
       end
 
       def detect
@@ -52,6 +52,21 @@ module JavaBuildpack
           .add_system_property('XXaltjvm','dcevm')
           .add_javaagent(libpath +  jar_name)
 
+        
+        jdb_cmd = ".java-buildpack/open_jdk_jre/bin/java -cp .java-buildpack/open_jdk_jre/lib/tools.jar com.sun.tools.example.debug.tty.TTY"
+        
+        devUtils = 
+              {
+                :start => "default",
+                :server_port => ":$PORT",  
+                :jdb_path => "#{jdb_cmd}", 
+                :jdb_debug_path => "jdb", 
+                :app_url => "http://localhost:3000" 
+              }
+        
+ 
+        strDevUtils = devUtils.to_json.gsub "\"",  "\\\"" 
+        @droplet.environment_variables.add_environment_variable 'DEV_UTILS',  "\"" + strDevUtils + "\""
       end
 
       protected

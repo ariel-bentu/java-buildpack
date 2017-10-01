@@ -100,6 +100,39 @@ module JavaBuildpack
       payload
     end
 
+    def dev_release
+      container = component_detection('container', @containers, true).first
+      no_container unless container
+
+      commands = []
+      commands << component_detection('JRE', @jres, true).first.release
+
+      component_detection('framework', @frameworks, false).map(&:release)
+
+      commands << container.release
+
+      commands.insert 0, @java_opts.as_env_var
+      command = commands.flatten.compact.join(' && ')
+
+      app_controller_exe = "/home/vcap/app/.java-buildpack/hotswap_agent/lib/appcontroller"
+      
+      @logger.debug { "App ENV Vars:\n#{ENV.to_h.to_yaml}" }
+      
+      command.sub! "http.port=$PORT", "http.port=3000"
+      runCmd = (Base64.encode64("PORT=3000 " + command).delete("\n")).delete("\n")
+      envVar = component_info['env_vars'].as_env_vars
+      startDev = "#{envVar} #{app_controller_exe} -startCmd #{runCmd}" 
+      payload = {
+        'addons'                => [],
+        'config_vars'           => {},
+        'default_process_types' => { 'web' => startDev, 'task' => command }
+      }.to_yaml
+
+      @logger.debug { "Release Payload:\n#{payload}" }
+      payload
+    end
+
+
     private_class_method :new
 
     private
