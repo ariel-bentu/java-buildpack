@@ -120,7 +120,7 @@ module JavaBuildpack
       
       command.sub! "http.port=$PORT", "http.port=3000"
       runCmd = (Base64.encode64("PORT=3000 " + command).delete("\n")).delete("\n")
-      envVar = component_info['env_vars'].as_env_vars
+      envVar = @component_info['env_vars'].as_env_vars
       startDev = "#{envVar} #{app_controller_exe} -startCmd #{runCmd}" 
       payload = {
         'addons'                => [],
@@ -157,7 +157,7 @@ module JavaBuildpack
       mutable_java_home   = Component::MutableJavaHome.new
       immutable_java_home = Component::ImmutableJavaHome.new mutable_java_home, app_dir
 
-      component_info = {
+      @component_info = {
         'additional_libraries'  => Component::AdditionalLibraries.new(app_dir),
         'app_dir'               => app_dir,
         'application'           => application,
@@ -167,7 +167,7 @@ module JavaBuildpack
         'security_providers'    => Component::SecurityProviders.new
       }
 
-      instantiate_components(mutable_java_home, immutable_java_home, component_info)
+      instantiate_components(mutable_java_home, immutable_java_home, @component_info)
     end
 
     def instantiate_components(mutable_java_home, immutable_java_home, component_info)
