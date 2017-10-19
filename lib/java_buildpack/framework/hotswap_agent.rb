@@ -52,7 +52,7 @@ module JavaBuildpack
           .java_opts
           .add_system_property('server.port','3000')
           .add_system_property('XXaltjvm','dcevm')
-          .add_javaagent(libpath +  jar_name)
+          .add_javaagent(libpath +  @configuration['hotswap_jar_name'])
 
         sources_dir = "/home/vcap/app/sources"
         
