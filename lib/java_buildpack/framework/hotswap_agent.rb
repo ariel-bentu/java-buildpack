@@ -37,7 +37,7 @@ module JavaBuildpack
       def compile
         download_jar('1.0', @configuration['uri'], hotswap_jar_name, libpath)
         download_jar('1.0', @configuration['vscodedebug_uri'], vscodedebug_jar_name, libpath)
-        download_jar('1.0', @configuration['vscodedebug_ms_jar_uri'], @configuration['vscodedebug_ms_jar_name'], libpath)
+        download_jar('1.0', @configuration['vscodedebug_ms_jar_uri'], vscodedebug_jar_name, libpath)
         
         download_tar('1.0', @appcontroller_uri, true, libpath, 'App Controller')
 
@@ -98,6 +98,10 @@ module JavaBuildpack
 
       def hotswap_jar_name
         @configuration['hotswap_jar_name']
+      end
+
+      def vscodedebug_ms_jar_name
+        @configuration['vscodedebug_ms_jar_name']
       end
 
       def vscodedebug_jar_name
