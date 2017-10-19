@@ -35,8 +35,8 @@ module JavaBuildpack
 
       # (see JavaBuildpack::Component::BaseComponent#compile)
       def compile
-        download_jar('1.0', @configuration['uri'], @configuration['hotswap_jar_name'], libpath)
-        download_jar('1.0', @configuration['vscodedebug_uri'], @configuration['vscodedebug_jar_name'], libpath)
+        download_jar('1.0', @configuration['uri'], hotswap_jar_name, libpath)
+        download_jar('1.0', @configuration['vscodedebug_uri'], vscodedebug_jar_name, libpath)
         download_tar('1.0', @appcontroller_uri, true, libpath, 'App Controller')
 
         #download_tar('1.0', @jdblibs_uri, false, libpath, 'JDB')
@@ -52,12 +52,12 @@ module JavaBuildpack
           .java_opts
           .add_system_property('server.port','3000')
           .add_system_property('XXaltjvm','dcevm')
-          .add_javaagent(libpath +  @configuration['hotswap_jar_name'])
+          .add_javaagent(libpath +  hotswap_jar_name)
 
         sources_dir = "/home/vcap/app/sources"
         
         #jdb_cmd = "/home/vcap/app/.java-buildpack/open_jdk_jre/bin/java -cp /home/vcap/app/.java-buildpack/open_jdk_jre/lib/tools.jar com.sun.tools.example.debug.tty.TTY"
-        jdb_cmd = "/home/vcap/app/.java-buildpack/open_jdk_jre/bin/java -cp /home/vcap/app/.java-buildpack/open_jdk_jre/lib/tools.jar:"+ libpath + (@configuration['vscodedebug_jar_name']).to_s + " sap.bentu.javadebug.VSCodeJavaDebuger " + sources_dir
+        jdb_cmd = "/home/vcap/app/.java-buildpack/open_jdk_jre/bin/java -cp /home/vcap/app/.java-buildpack/open_jdk_jre/lib/tools.jar:"+ libpath + vscodedebug_jar_name + " sap.bentu.javadebug.VSCodeJavaDebuger " + sources_dir
         devUtils = 
               {
                 :start => "default",
@@ -88,6 +88,14 @@ module JavaBuildpack
 
       def libpath
         @droplet.sandbox + ('lib/')
+      end
+
+      def hotswap_jar_name
+        @configuration['hotswap_jar_name']
+      end
+
+      def vscodedebug_jar_name
+        @configuration['vscodedebug_jar_name']
       end
 
       def binpath
