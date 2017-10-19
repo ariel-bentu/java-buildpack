@@ -57,7 +57,7 @@ module JavaBuildpack
         sources_dir = "/home/vcap/app/sources"
         
         #jdb_cmd = "/home/vcap/app/.java-buildpack/open_jdk_jre/bin/java -cp /home/vcap/app/.java-buildpack/open_jdk_jre/lib/tools.jar com.sun.tools.example.debug.tty.TTY"
-        jdb_cmd = ('/home/vcap/app/.java-buildpack/open_jdk_jre/bin/java -cp /home/vcap/app/.java-buildpack/open_jdk_jre/lib/tools.jar:') + libpath.to_s + vscodedebug_jar_name + (' sap.bentu.javadebug.VSCodeJavaDebuger ') + sources_dir
+        jdb_cmd = ('/home/vcap/app/.java-buildpack/open_jdk_jre/bin/java -cp /home/vcap/app/.java-buildpack/open_jdk_jre/lib/tools.jar:') + runtime_libpath + vscodedebug_jar_name + (' sap.bentu.javadebug.VSCodeJavaDebuger ') + sources_dir
         devUtils = 
               {
                 :start => "default",
@@ -88,6 +88,10 @@ module JavaBuildpack
 
       def libpath
         @droplet.sandbox + ('lib/')
+      end
+
+      def runtime_libpath
+        "/home/vcap/app/.java-buildpack/hotswap_agent/lib/"
       end
 
       def hotswap_jar_name
