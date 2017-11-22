@@ -23,7 +23,7 @@ hotswap_jar_name: hotswap-agent-1.0.jar
 appcontroller_uri: https://github.com/ariel-bentu/java-buildpack/blob/master/appcontroller.tar.gz?raw=true
 vscodedebug_jar_name: vscode-javadebug.jar
 vscodedebug_uri: https://github.com/ariel-bentu/java-buildpack/blob/master/javadebug-0.0.1-SNAPSHOT.jar?raw=true
-vscodedebug_ms_jar_uri: https://github.com/ariel-bentu/java-buildpack/blob/master/com.microsoft.java.debug.core-0.2.0.jar?raw=true
-vscodedebug_ms_jar_name: com.microsoft.java.debug.core-0.2.0.jar
+vscodedebug_ms_jar_uri: https://github.com/ariel-bentu/java-buildpack/blob/master/com.microsoft.java.debug.core-0.3.1.jar?raw=true
+vscodedebug_ms_jar_name: com.microsoft.java.debug.core-0.3.1.jar
 
 #jdblibs_uri: https://github.com/ariel-bentu/java-buildpack/raw/master/sc_jdb.tar?raw=true
